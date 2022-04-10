@@ -78,7 +78,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 func (m model) View() string {
 	var rowContainer []string
-	s := "Input your wordle guess here! \n\n"
+	s := logo() + "\n\n"
 
 	for row := 0; row < len(m.inputBoxes); row++ {
 		for col := 0; col < len(m.inputBoxes[m.row]); col++ {
@@ -106,6 +106,16 @@ func generateInputBoxes() [6][5]inputbox.Model {
 		}
 	}
 	return ib
+}
+
+func logo() string {
+	return `
+╔╦═╦╗─────╔╗
+║║║║╠╦╦═╦═╣╠╦╗╔═╗
+║║║║║╔╣╩╣═╣═╣╚╣╩╣
+╚═╩═╩╝╚═╩═╩╩╩═╩═╝
+	   v1.0.0
+	`
 }
 
 func main() {
