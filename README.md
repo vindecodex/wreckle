@@ -1,9 +1,9 @@
 <div align="center">
 	<pre>
-		╔╦═╦╗─────╔╗
-		║║║║╠╦╦═╦═╣╠╦╗╔═╗
-		║║║║║╔╣╩╣═╣═╣╚╣╩╣
-		╚═╩═╩╝╚═╩═╩╩╩═╩═╝
+╔╦═╦╗─────╔╗
+║║║║╠╦╦═╦═╣╠╦╗╔═╗
+║║║║║╔╣╩╣═╣═╣╚╣╩╣
+╚═╩═╩╝╚═╩═╩╩╩═╩═╝
 	</pre>
 	<p>
 		Wreckle a wordle cracker that analyze your previous inputs and provide possible answers <br>
