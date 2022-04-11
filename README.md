@@ -15,9 +15,9 @@
 
 Currently inprogress :heavy_check_mark:
 
-- [] Refactor :sparkle:
-- [] Display selection box for colors upon submitting the first guess
-- [] Provide/Display possible answers upon submitting the first guess
+- [ ] Refactor :sparkle:
+- [ ] Display selection box for colors upon submitting the first guess
+- [ ] Provide/Display possible answers upon submitting the first guess
 
 
 #### License
