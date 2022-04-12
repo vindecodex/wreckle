@@ -7,6 +7,7 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 	"github.com/vindecodex/wreckle/inputbox"
+	"golang.org/x/crypto/ssh/terminal"
 )
 
 type model struct {
@@ -78,6 +79,8 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 func (m model) View() string {
 	var rowContainer []string
+	var grid string
+
 	s := logo() + "\n\n"
 
 	for row := 0; row < len(m.inputBoxes); row++ {
@@ -85,17 +88,25 @@ func (m model) View() string {
 			rowContainer = append(rowContainer, m.inputBoxes[row][col].View())
 		}
 
-		s += alignVertical(rowContainer) + "\n"
+		grid += alignHorizontal(rowContainer...) + "\n"
 		rowContainer = nil
 	}
 
-	s += "\nPress ctrl + c to quit.\n"
+	help := "\nPress ctrl + c to quit.\n"
 
-	return lipgloss.JoinVertical(lipgloss.Center, s)
+	container := alignVertical(s, grid, help)
+
+	width, height, _ := terminal.GetSize(0)
+
+	return lipgloss.Place(width, height, lipgloss.Center, lipgloss.Center, container)
 }
 
-func alignVertical(box []string) string {
-	return lipgloss.JoinHorizontal(lipgloss.Bottom, box...)
+func alignHorizontal(boxes ...string) string {
+	return lipgloss.JoinHorizontal(lipgloss.Bottom, boxes...)
+}
+
+func alignVertical(components ...string) string {
+	return lipgloss.JoinVertical(lipgloss.Center, components...)
 }
 
 func generateInputBoxes() [6][5]inputbox.Model {
