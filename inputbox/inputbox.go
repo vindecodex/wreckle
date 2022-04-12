@@ -1,6 +1,8 @@
 package inputbox
 
 import (
+	"strings"
+
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 )
@@ -25,7 +27,7 @@ func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
 		switch msg.String() {
 
 		default:
-			m.Value = []byte(msg.String())[0]
+			m.Value = []byte(strings.ToUpper(msg.String()))[0]
 			return m, nil
 		}
 	}
