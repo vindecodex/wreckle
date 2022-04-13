@@ -48,6 +48,9 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case "ctrl+c":
 			return m, tea.Quit
 
+		case "ctrl+r":
+			return m.reset(), nil
+
 		case "backspace":
 			if m.col > 0 {
 				m.inputBoxes[m.row][m.col-1].Value = 32
@@ -93,12 +96,23 @@ func (m model) View() string {
 	}
 
 	help := "\nPress ctrl + c to quit.\n"
+	help += "Press ctrl + r to restart.\n"
 
 	container := alignVertical(s, grid, help)
 
 	width, height, _ := terminal.GetSize(0)
 
 	return lipgloss.Place(width, height, lipgloss.Center, lipgloss.Center, container)
+}
+
+func (m model) reset() model {
+	m.inputBoxes = generateInputBoxes()
+	m.row = 0
+	m.col = 0
+	m.red = ""
+	m.green = ""
+	m.blue = ""
+	return m
 }
 
 func alignHorizontal(boxes ...string) string {
