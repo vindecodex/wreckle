@@ -4,7 +4,7 @@
 ║║║║║╔╣╩╣═╣═╣╚╣╩╣
 ╚═╩═╩╝╚═╩═╩╩╩═╩═╝</pre>
 	<p>
-		Wreckle a wordle cracker that analyze your previous inputs and provide possible answers <br>
+		Wreckle a wordle cracker that analyze your previous inputs and provide possible answers.<br>
 		( THOUGH IT's PRETTY USELESS BUT  I BUILD IT FOR LEARNING PURPOSES IN BUILDING CLI BASED PROGRAM )
 	</p>
 </div>
