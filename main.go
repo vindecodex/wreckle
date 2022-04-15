@@ -8,12 +8,8 @@ import (
 	"github.com/charmbracelet/lipgloss"
 	"github.com/vindecodex/wreckle/inputbox"
 	"github.com/vindecodex/wreckle/selectionbox"
+	"github.com/vindecodex/wreckle/utils"
 	"golang.org/x/crypto/ssh/terminal"
-)
-
-const (
-	SET_WORDS string = "SET_WORDS"
-	SET_COLOR        = "SET_COLOR"
 )
 
 type model struct {
@@ -26,20 +22,27 @@ type model struct {
 	row int
 	col int
 
-	inputBoxes   [6][5]inputbox.Model
+	width  int
+	height int
+
+	inputBoxes   [utils.ROW][utils.COL]inputbox.Model
 	selectionBox selectionbox.Model
 }
 
 func initialModel() model {
+	width, height, _ := terminal.GetSize(0)
 	return model{
 		red:   "",
 		blue:  "",
 		green: "",
 
-		status: SET_WORDS,
+		status: utils.SET_WORDS,
 
 		row: 0,
 		col: 0,
+
+		width:  width,
+		height: height,
 
 		inputBoxes:   generateInputBoxes(),
 		selectionBox: selectionbox.New(),
@@ -75,16 +78,22 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m, nil
 
 		case "enter":
-			maxCol := len(m.inputBoxes[m.row]) - 1
-			if m.row < len(m.inputBoxes)-1 && m.inputBoxes[m.row][maxCol].Value != 32 {
-				m.row++
-				m.col = 0
-				m.status = SET_COLOR
+			if m.status == utils.SET_WORDS {
+				maxCol := len(m.inputBoxes[m.row]) - 1
+				if m.row < len(m.inputBoxes)-1 && m.inputBoxes[m.row][maxCol].Value != 32 {
+					m.row++
+					m.col = 0
+					m.status = utils.SET_COLOR
+				}
+			}
+			if m.status == utils.SET_COLOR {
+				m.inputBoxes[m.row][m.col].Color = m.selectionBox.Selected
+				m.inputBoxes[m.row][m.col] = m.inputBoxes[m.row][m.col]
 			}
 			return m, nil
 
 		default:
-			if m.status == SET_WORDS {
+			if m.status == utils.SET_WORDS {
 				if m.col < len(m.inputBoxes[m.row]) {
 					mdl, _ := m.inputBoxes[m.row][m.col].Update(msg)
 					m.inputBoxes[m.row][m.col] = mdl
@@ -106,7 +115,7 @@ func (m model) View() string {
 
 	logo := logo() + "\n\n"
 
-	if m.status == SET_WORDS {
+	if m.status == utils.SET_WORDS {
 
 		for row := 0; row < len(m.inputBoxes); row++ {
 			for col := 0; col < len(m.inputBoxes[m.row]); col++ {
@@ -118,7 +127,7 @@ func (m model) View() string {
 		}
 	}
 
-	if m.status == SET_COLOR {
+	if m.status == utils.SET_COLOR {
 		for col := 0; col < len(m.inputBoxes[m.row]); col++ {
 			rowContainer = append(rowContainer, m.inputBoxes[m.row-1][col].View())
 		}
@@ -130,21 +139,22 @@ func (m model) View() string {
 	help := "\nPress ctrl + c to quit.\n"
 	help += "Press ctrl + r to restart.\n"
 
-	width, height, _ := terminal.GetSize(0)
-
 	container := alignVertical(logo, grid, colorSelection, help)
 
-	return lipgloss.Place(width, height, lipgloss.Center, lipgloss.Center, container)
+	return lipgloss.Place(m.width, m.height, lipgloss.Center, lipgloss.Center, container)
 }
 
 func (m model) reset() model {
+	width, height, _ := terminal.GetSize(0)
 	m.inputBoxes = generateInputBoxes()
 	m.row = 0
 	m.col = 0
 	m.red = ""
 	m.green = ""
 	m.blue = ""
-	m.status = SET_WORDS
+	m.status = utils.SET_WORDS
+	m.width = width
+	m.height = height
 	return m
 }
 
@@ -156,8 +166,8 @@ func alignVertical(components ...string) string {
 	return lipgloss.JoinVertical(lipgloss.Center, components...)
 }
 
-func generateInputBoxes() [6][5]inputbox.Model {
-	ib := [6][5]inputbox.Model{}
+func generateInputBoxes() [utils.ROW][utils.COL]inputbox.Model {
+	ib := [utils.ROW][utils.COL]inputbox.Model{}
 	for row := 0; row < len(ib); row++ {
 		for col := 0; col < len(ib[row]); col++ {
 			ib[row][col] = inputbox.New()
