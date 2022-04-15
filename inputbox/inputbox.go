@@ -7,6 +7,20 @@ import (
 	"github.com/charmbracelet/lipgloss"
 )
 
+var Colors = map[string]lipgloss.Color{
+	"white": lipgloss.Color("#ffffff"),
+	"red":   lipgloss.Color("#fc0574"),
+	"blue":  lipgloss.Color("#fc0574"),
+	"green": lipgloss.Color("#05fc91"),
+}
+
+const (
+	WHITE string = "white"
+	RED          = "red"
+	BLUE         = "blue"
+	GREEN        = "green"
+)
+
 type Model struct {
 	Value byte
 	Color string
@@ -15,7 +29,7 @@ type Model struct {
 func initialModel() Model {
 	return Model{
 		Value: 32,
-		Color: "white",
+		Color: WHITE,
 	}
 }
 
@@ -45,9 +59,9 @@ func (m Model) inputBox() string {
 		Bold(true).
 		PaddingLeft(2).
 		PaddingRight(2).
-		Foreground(lipgloss.Color("#FFFFFF")).
+		Foreground(Colors[m.Color]).
 		BorderStyle(lipgloss.NormalBorder()).
-		BorderForeground(lipgloss.Color("#FFFFFF")).
+		BorderForeground(Colors[m.Color]).
 		Render(string(m.Value))
 }
 
