@@ -14,7 +14,7 @@
 #### TODO
 
 Currently inprogress :heavy_check_mark:
-
+- [x] Use state pattern
 - [ ] Refactor :sparkle:
 - [ ] Display selection box for colors upon submitting the first guess
 - [ ] Provide/Display possible answers upon submitting the first guess
