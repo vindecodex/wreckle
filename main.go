@@ -83,9 +83,19 @@ func (h InputState) render() string {
 	return lipgloss.Place(h.m.width, h.m.height, lipgloss.Center, lipgloss.Center, app)
 }
 
-func (h ColorState) onBackspace() {}
+func (h ColorState) onBackspace() {
+	if h.m.col > 0 {
+		h.m.inputBoxes[h.m.row-1][h.m.col-1].MetaTag = c.WHITE
+		h.m.col--
+	}
+}
 
-func (h ColorState) onEnter() {}
+func (h ColorState) onEnter() {
+	if h.m.col == MAXCOL && h.m.row < MAXROW-1 {
+		h.m.col = 0
+		h.m.setState(h.m.inputState)
+	}
+}
 
 func (h ColorState) handleInput(msg string) {
 	if h.m.col < MAXCOL {
@@ -117,7 +127,7 @@ func (h ColorState) render() string {
 	for c := 0; c < MAXCOL; c++ {
 		rowContainer = append(rowContainer, h.m.inputBoxes[h.m.row-1][c].View())
 	}
-	gridContainer += lipgloss.NewStyle().MarginTop(2).Render(alignHorizontal(rowContainer...))
+	gridContainer += lipgloss.NewStyle().Render(alignHorizontal(rowContainer...))
 
 	help := "Press [ctrl+c] to exit \n"
 	help += "Press [ctrl+r] to restart \n"
